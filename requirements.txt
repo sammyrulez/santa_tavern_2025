@@ -1,0 +1,4 @@
+datapizza-ai
+openai
+pydantic
+
