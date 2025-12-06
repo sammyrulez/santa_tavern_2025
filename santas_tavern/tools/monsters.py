@@ -14,6 +14,12 @@ monsters_list : Optional[Dict[str,Any]] = None
 
 global cache
 cache: Dict[str, Any] = {}
+# Load cache from disk (optional)
+try:
+    with open("dnd_cache.json", "r") as f:
+        cache = json.load(f)
+except FileNotFoundError:
+    cache = {}
 
 
 def _get_item_details(category: str, index: str, cache: Dict[str, Any]) -> Dict[str, Any]:
@@ -44,6 +50,10 @@ def _get_item_details(category: str, index: str, cache: Dict[str, Any]) -> Dict[
 
         # Cache the result
         cache[cache_key] = data
+        # Save cache to disk (optional)
+        with  open("dnd_cache.json", "w") as f:
+            json.dump(cache, f)
+
         return data
     except requests.RequestException as e:
         logger.error(f"Request failed for {category}/{index}: {e}")
