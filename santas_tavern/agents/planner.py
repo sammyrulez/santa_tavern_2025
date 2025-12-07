@@ -26,7 +26,7 @@ def create_planner_agent(client):
         #with open('/Users/sam/projects/santa_tavern_2025/example_story.json', 'r', encoding='utf-8') as f:
         #    story = f.read()
         story = story_weaver.run(f"Crea una avventura natalizia per D&D 5e con il seguente tema: {str(params)}.").text
-
+        story = story.replace("```json", " ").replace("```", " ")
         packet = AdventurePacket.model_validate_json(story)
         return packet
 

@@ -4,8 +4,27 @@ import argparse
 import os
 import json
 from santas_tavern.config import get_openai_client
-from santas_tavern.models import AdventureGenerationParams
+from santas_tavern.models import AdventureGenerationParams, AdventurePacket, EncounterType, EncounterDifficulty
 from santas_tavern.agents.planner import create_planner_agent
+
+def _translate_encounter_type(enc_type:EncounterType) -> str :
+    """Traduci EncounterType in italiano."""
+    translations = {
+        EncounterType.COMBAT: "Combattimento",
+        EncounterType.PUZZLE: "Enigma",
+        EncounterType.EXPLORATION: "Esplorazione",
+        EncounterType.SOCIAL: "Interazione Sociale",
+    }
+    return translations.get(enc_type, "Sconosciuto")
+
+def _translate_encounter_difficulty(difficulty: EncounterDifficulty) -> str:
+    """Traduci EncounterDifficulty in italiano."""
+    translations = {
+        EncounterDifficulty.EASY: "Facile",
+        EncounterDifficulty.MEDIUM: "Media",
+        EncounterDifficulty.HARD: "Difficile",
+    }
+    return translations.get(difficulty, "Sconosciuto")
 
 
 def format_adventure_markdown(packet) -> str:
@@ -18,12 +37,13 @@ def format_adventure_markdown(packet) -> str:
     for i, act in enumerate(packet.acts, 1):
         md += f"### Atto {i}: {act.name}\n{act.description}\n"
         for scene in act.scenes:
-            md += f"- **Scena:** {scene.name}\n  {scene.description}\n"
-            md += "\n## Incontri\n"
-            for enc in [ enc for enc in packet.encounters if enc.id in scene.encounter_ids ]:
-                md += f"- [{enc.type}] {enc.description} (Difficoltà: {enc.difficulty})\n"
-                if enc.stat_blocks:
-                    md += "  - Stat Blocks:\n" + enc.stat_blocks
+            md += f"#### Scena: {scene.name}\n  {scene.description}\n"
+            if scene.encounter_ids:
+                md += "\n##### Incontri\n"
+                for enc in [ enc for enc in packet.encounters if enc.id in scene.encounter_ids ]:
+                    md += f"- [{_translate_encounter_type(enc.type)}] {enc.description} (Difficoltà: {_translate_encounter_difficulty(enc.difficulty)})\n"
+                    if enc.stat_blocks:
+                        md += "  - Stat Blocks:\n" + enc.stat_blocks + "\n---\n"
 
     md += "\n## NPC\n"
     for npc in packet.npcs:
@@ -60,14 +80,16 @@ def main():
         tone=args.tone,
         duration_hours=args.duration_hours
     )
-    packet = planner(params)
+    #packet = planner(params)
 
     json_path = os.path.join(args.output_dir, "adventure_packet.json")
     md_path = os.path.join(args.output_dir, "adventure_notes.md")
-    with open(json_path, "w", encoding="utf-8") as f:
-        f.write(packet.model_dump_json(indent=2))
-    with open(md_path, "w", encoding="utf-8") as f:
-        f.write(format_adventure_markdown(packet))
+    #with open(json_path, "w", encoding="utf-8") as f:
+    #    f.write(packet.model_dump_json(indent=2))
+    with open(json_path, "r") as f:
+        packet =  AdventurePacket.model_validate_json(f.read())
+        with open(md_path, "w", encoding="utf-8") as f:
+                f.write(format_adventure_markdown(packet))
 
     print(f"Avventura generata:\n- {json_path}\n- {md_path}")
 
