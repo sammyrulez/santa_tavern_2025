@@ -19,9 +19,12 @@ def format_adventure_markdown(packet) -> str:
         md += f"### Atto {i}: {act.name}\n{act.description}\n"
         for scene in act.scenes:
             md += f"- **Scena:** {scene.name}\n  {scene.description}\n"
-    md += "\n## Incontri\n"
-    for enc in packet.encounters:
-        md += f"- [{enc.type}] {enc.description} (Difficoltà: {enc.difficulty})\n"
+            md += "\n## Incontri\n"
+            for enc in [ enc for enc in packet.encounters if enc.id in scene.encounter_ids ]:
+                md += f"- [{enc.type}] {enc.description} (Difficoltà: {enc.difficulty})\n"
+                if enc.stat_blocks:
+                    md += "  - Stat Blocks:\n" + enc.stat_blocks
+
     md += "\n## NPC\n"
     for npc in packet.npcs:
         md += f"- {npc.name} ({npc.role}): {npc.personality}\n"

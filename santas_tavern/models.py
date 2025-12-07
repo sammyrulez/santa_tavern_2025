@@ -37,6 +37,7 @@ class Encounter(BaseModel):
     party_level: int
     party_size: int
     notes: Optional[str] = None
+    stat_blocks: Optional[str] = None  # Stat block in formato tabella markdown
 
 class NPC(BaseModel):
     """Personaggio non giocante."""
@@ -78,122 +79,5 @@ class AdventureGenerationParams(BaseModel):
     tone: str = "cozy"
     duration_hours: float = 3.0
 
-json_schema ={
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "AdventurePacket",
-  "type": "object",
-  "properties": {
-    "title": {
-      "type": "string",
-      "description": "Titolo dell'avventura."
-    },
-    "pitch": {
-      "type": "string",
-      "description": "Pitch in una frase."
-    },
-    "synopsis": {
-      "type": "string",
-      "description": "Sinossi dell'avventura."
-    },
-    "tone": {
-      "type": "string",
-      "description": "Tono dell'avventura."
-    },
-    "acts": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "description": { "type": "string" },
-          "scenes": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": { "type": "string" },
-                "description": { "type": "string" },
-                "encounter_ids": {
-                  "type": "array",
-                  "items": { "type": "string" }
-                }
-              },
-              "required": ["name", "description", "encounter_ids"]
-            }
-          }
-        },
-        "required": ["name", "description", "scenes"]
-      }
-    },
-    "encounters": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "string" },
-          "type": {
-            "type": "string",
-            "enum": ["combat", "social", "exploration"]
-          },
-          "description": { "type": "string" },
-          "difficulty": {
-            "type": "string",
-            "enum": ["easy", "medium", "hard"]
-          },
-          "party_level": { "type": "integer" },
-          "party_size": { "type": "integer" },
-          "notes": { "type": ["string", "null"] }
-        },
-        "required": ["id", "type", "description", "difficulty", "party_level", "party_size"]
-      }
-    },
-    "npcs": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "role": { "type": "string" },
-          "personality": { "type": "string" }
-        },
-        "required": ["name", "role", "personality"]
-      }
-    },
-    "magic_items": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "string" },
-          "name": { "type": "string" },
-          "rarity": {
-            "type": "string",
-            "enum": ["common", "uncommon", "rare", "very_rare"]
-          },
-          "effect_text": { "type": "string" },
-          "flavor": { "type": ["string", "null"] }
-        },
-        "required": ["id", "name", "rarity", "effect_text"]
-      }
-    },
-    "lore_notes": {
-      "type": ["string", "null"],
-      "description": "Note di lore opzionali."
-    },
-    "gm_notes": {
-      "type": ["string", "null"],
-      "description": "Note opzionali per il GM."
-    }
-  },
-  "required": [
-    "title",
-    "pitch",
-    "synopsis",
-    "tone",
-    "acts",
-    "encounters",
-    "npcs",
-    "magic_items"
-  ]
-}
+json_schema = AdventurePacket.model_json_schema()
 
