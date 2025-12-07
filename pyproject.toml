@@ -1,7 +1,7 @@
 [project]
 name = "santa-tavern-2025"
 version = "0.1.0"
-description = "Add your description here"
+description = "Agentic D&D one-shot generator for cozy Christmas sessions, built with datapizza-ai."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -9,4 +9,10 @@ dependencies = [
     "datapizza-ai-clients-openai>=0.0.9",
     "pydantic>=2.12.5",
     "requests>=2.32.5",
+]
+
+[project.optional-dependencies]
+development = [
+    "pre-commit>=4.5.0",
+    "ruff>=0.14.8",
 ]

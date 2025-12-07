@@ -11,3 +11,4 @@ wheels/
 .idea
 output
 /example_story.json
+/dnd_cache.json
