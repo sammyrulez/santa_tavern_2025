@@ -43,9 +43,6 @@ This project is designed as a submission for the **Datapizza Christmas AI Challe
   - Output is a well-defined JSON schema (easy to reuse in tools, VTTs, or UIs)
   - Optional markdown/HTML export for a printable GM handout
 
-- **Optional RAG for campaign continuity**
-  - Plug in past adventures / notes so the system can reuse NPCs, locations, and traditions  
-  - Uses Datapizza’s RAG components (parsers, splitters, vectorstore) for retrieval. :contentReference[oaicite:1]{index=1}  
 
 ---
 
@@ -107,7 +104,6 @@ The system is built around several collaborating agents:
 - **Language**: Python `>= 3.10, < 3.13` :contentReference[oaicite:2]{index=2}  
 - **Framework**: [`datapizza-ai`](https://github.com/datapizza-labs/datapizza-ai) (agents, tools, RAG)
 - **LLM Provider**: OpenAI by default, easily swappable
-- **Vector Store (optional)**: Qdrant or other vector backend supported via Datapizza RAG abstractions :contentReference[oaicite:3]{index=3}  
 
 ---
 
@@ -117,7 +113,6 @@ The system is built around several collaborating agents:
 
 - Python `3.10`–`3.12`
 - An API key for a supported LLM (e.g. OpenAI)
-- (Optional) A running Qdrant instance or cloud account for RAG
 
 ### 2. Installation
 
@@ -129,5 +124,3 @@ python -m venv .venv
 source .venv/bin/activate    # On Windows: .venv\Scripts\activate
 
 pip install -r requirements.txt
-# datapizza-ai is installed via requirements, or:
-# pip install datapizza-ai

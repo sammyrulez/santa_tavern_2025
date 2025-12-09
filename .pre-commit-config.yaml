@@ -1,0 +1,13 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.4
+    hooks:
+      - id: ruff
+      - id: ruff-format
+  - repo: local
+    hooks:
+      - id: dump-uv-requirements
+        name: Dump uv dependencies to requirements.txt
+        entry: uv pip freeze > requirements.txt
+        language: system
+        types: [python]
