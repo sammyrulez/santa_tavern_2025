@@ -71,25 +71,32 @@ def main():
     parser.add_argument("--output-dir", type=str, default="./output", help="Directory di output")
     args = parser.parse_args()
 
-    os.makedirs(args.output_dir, exist_ok=True)
-    client = get_openai_client()
-    planner = create_planner_agent(client)
+    output_dir = args.output_dir
+    os.makedirs(output_dir, exist_ok=True)
     params = AdventureGenerationParams(
         party_level=args.party_level,
         party_size=args.party_size,
         tone=args.tone,
         duration_hours=args.duration_hours
     )
+    json_path, md_path = generate_adv(output_dir, params)
+
+    print(f"Avventura generata:\n- {json_path}\n- {md_path}")
+
+
+def generate_adv(output_dir:str, params: AdventureGenerationParams) -> tuple[str, str]:
+    client = get_openai_client()
+    planner = create_planner_agent(client)
     packet = planner(params)
 
-    json_path = os.path.join(args.output_dir, "adventure_packet.json")
-    md_path = os.path.join(args.output_dir, "adventure_notes.md")
+    json_path = os.path.join(output_dir, "adventure_packet.json")
+    md_path = os.path.join(output_dir, "adventure_notes.md")
     with open(json_path, "w", encoding="utf-8") as f:
         f.write(packet.model_dump_json(indent=2))
     with open(md_path, "w", encoding="utf-8") as f:
-                f.write(format_adventure_markdown(packet))
+        f.write(format_adventure_markdown(packet))
+    return json_path, md_path
 
-    print(f"Avventura generata:\n- {json_path}\n- {md_path}")
 
 if __name__ == "__main__":
     main()

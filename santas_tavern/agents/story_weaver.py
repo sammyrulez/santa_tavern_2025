@@ -19,7 +19,7 @@ def create_story_weaver_agent(client, sqad: List[Agent]):
         "Ogni atto deve avere nome, descrizione e scene con descrizione e riferimenti agli incontri. "
         "Includi una lista di NPC rilevanti.",
         "Includi statistiche per i mostri da affrontare rilevanti.",
-        "Usa le seguenti risorse a tua disposizione per arricchire la storia: "+ ", ".join([helper.name for helper in sqad]) + ". ",
+        "Usa le seguenti risorse a tua disposizione per arricchire la storia: "+ ", ".join([helper.name for helper in sqad]) + ". Utilizza il più possibile i loro output per creare una storia ricca di dettagli",
         "Restituisci l'avventura in formato JSON conforme al seguente schema: " + json.dumps(json_schema, indent=2) + " \n Rispetta scripolosamente la struttura e i valori delle enum indicate nello schema!"
     )
     agent = Agent(name="StoryWeaver", client=client,
