@@ -99,6 +99,20 @@ The system is built around several collaborating agents:
 
 ---
 
+## 🧰 Tools
+
+### 🐲 Monster Finder Tool (`santas_tavern/tools/monsters.py`)
+
+This tool agent provides advanced search and retrieval of D&D 5e monsters by Challenge Rating (CR), leveraging the official D&D 5e API. It supports:
+
+- Searching for monsters within a specified CR range.
+- Fetching detailed monster data (name, type, size, alignment, hit points, armor class, etc.).
+- Caching API responses locally to speed up repeated queries and reduce API calls.
+
+The main function, `find_monsters_by_challenge_rating`, can be used by agents to quickly obtain a structured list of monsters matching the desired difficulty, ready for integration into adventures or encounters.
+
+All data is attributed to the [D&D 5e API](https://www.dnd5eapi.co), and the tool is designed for modular use within the agent framework
+
 ## 🏗️ Tech Stack
 
 - **Language**: Python `>= 3.10, < 3.13` :contentReference[oaicite:2]{index=2}  
@@ -124,3 +138,16 @@ python -m venv .venv
 source .venv/bin/activate    # On Windows: .venv\Scripts\activate
 
 pip install -r requirements.txt
+```
+
+## 3.️ Tooling & Automation
+
+- **Dependency Management**:
+  - `pip` for installing packages.
+  - `uv` for dependency management and lockfile generation ([uv](https://github.com/astral-sh/uv)).
+- **Linting & Formatting**:
+  - `ruff` for Python linting and automatic code fixes.
+- **Pre-commit Hooks**:
+  - Configured via `.pre-commit-config.yaml` to automatically run `ruff` and update `requirements.txt` (using `uv`) before each commit.
+- **Testing**:
+  - `pytest` for running automated tests in the `test/` folder.
