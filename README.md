@@ -26,7 +26,7 @@ This project is designed as a submission for the **Datapizza Christmas AI Challe
 ## ✨ Core Features
 
 - **Multi-agent architecture using `datapizza-ai`**  
-  - Agents with clear, focused responsibilities coordinated by a planner agent. :contentReference[oaicite:0]{index=0}  
+  - Agents with clear, focused responsibilities coordinated by a planner agent. 
 
 - **Adventure Packet generation**
   - Plot hook, 3-act structure, key scenes
@@ -115,7 +115,7 @@ All data is attributed to the [D&D 5e API](https://www.dnd5eapi.co), and the too
 
 ## 🏗️ Tech Stack
 
-- **Language**: Python `>= 3.10, < 3.13` :contentReference[oaicite:2]{index=2}  
+- **Language**: Python `>= 3.10, < 3.13` 
 - **Framework**: [`datapizza-ai`](https://github.com/datapizza-labs/datapizza-ai) (agents, tools, RAG)
 - **LLM Provider**: OpenAI by default, easily swappable
 

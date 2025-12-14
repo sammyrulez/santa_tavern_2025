@@ -1,8 +1,8 @@
 """EncounterSmith: agente per la generazione degli incontri."""
+
 from datapizza.agents import Agent
 from santas_tavern.tools.monsters import find_monsters_by_challenge_rating
 
-from santas_tavern.config import get_openai_client
 
 def create_encounter_smith_agent(client):
     """
@@ -19,12 +19,5 @@ def create_encounter_smith_agent(client):
         name="EncounterSmith",
         client=client,
         system_prompt=system_prompt,
-        tools=[find_monsters_by_challenge_rating]
+        tools=[find_monsters_by_challenge_rating],
     )
-
-"""client = get_openai_client()
-
-agent = create_encounter_smith_agent(client)
-res = agent.run("Il nostro eroe netra nella tana di un Orco con CR 0.5 e un Goblin con CR 0.25.")
-print(res.text)"""
-

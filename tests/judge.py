@@ -1,7 +1,7 @@
 from santas_tavern.config import get_openai_client
 from datapizza.agents import Agent
 from datapizza.clients.openai import OpenAIClient
-from pydantic import  BaseModel
+from pydantic import BaseModel
 
 
 class Verdict(BaseModel):
@@ -10,7 +10,7 @@ class Verdict(BaseModel):
 
 
 def llm_as_a_judge(adventure_text: str) -> Verdict:
-    client:OpenAIClient = get_openai_client()
+    client: OpenAIClient = get_openai_client()
     agent = Agent(
         name="judge-agent",
         system_prompt=f"""Sei un DM esperto che deve valutare le avventure generate da un altro agente. Fornisci feedback costruttivo e suggerimenti per migliorare la trama, i personaggi e gli incontri.
@@ -21,7 +21,7 @@ def llm_as_a_judge(adventure_text: str) -> Verdict:
                        Il feedback deve essere estremamente conciso e puntuale.
                        Fornisci il tuo giudizio in formato JSON con i campi 'result' (booleano) e 'feedback' (stringa).\n
                     
-                        {str(Verdict.model_json_schema())} """ ,
+                        {str(Verdict.model_json_schema())} """,
         client=client,
         max_steps=5,
     )

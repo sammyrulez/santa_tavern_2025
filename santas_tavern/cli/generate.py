@@ -2,12 +2,17 @@
 
 import argparse
 import os
-import json
 from santas_tavern.config import get_openai_client
-from santas_tavern.models import AdventureGenerationParams, AdventurePacket, EncounterType, EncounterDifficulty
+from santas_tavern.models import (
+    AdventureGenerationParams,
+    EncounterType,
+    EncounterDifficulty,
+)
 from santas_tavern.agents.planner import create_planner_agent
+from santas_tavern.rag import run_import_pipeline
 
-def _translate_encounter_type(enc_type:EncounterType) -> str :
+
+def _translate_encounter_type(enc_type: EncounterType) -> str:
     """Traduci EncounterType in italiano."""
     translations = {
         EncounterType.COMBAT: "Combattimento",
@@ -16,6 +21,7 @@ def _translate_encounter_type(enc_type:EncounterType) -> str :
         EncounterType.SOCIAL: "Interazione Sociale",
     }
     return translations.get(enc_type, "Sconosciuto")
+
 
 def _translate_encounter_difficulty(difficulty: EncounterDifficulty) -> str:
     """Traduci EncounterDifficulty in italiano."""
@@ -40,7 +46,9 @@ def format_adventure_markdown(packet) -> str:
             md += f"#### Scena: {scene.name}\n  {scene.description}\n"
             if scene.encounter_ids:
                 md += "\n##### Incontri\n"
-                for enc in [ enc for enc in packet.encounters if enc.id in scene.encounter_ids ]:
+                for enc in [
+                    enc for enc in packet.encounters if enc.id in scene.encounter_ids
+                ]:
                     md += f"- [{_translate_encounter_type(enc.type)}] {enc.description} (Difficoltà: {_translate_encounter_difficulty(enc.difficulty)})\n"
                     if enc.stat_blocks:
                         md += "  - Stat Blocks:\n" + enc.stat_blocks + "\n---\n"
@@ -64,29 +72,46 @@ def main():
     parser = argparse.ArgumentParser(
         description="Genera una one-shot natalizia D&D con Santa's Tavern."
     )
-    parser.add_argument("--party-level", type=int, required=True, help="Livello del party")
-    parser.add_argument("--party-size", type=int, required=True, help="Numero di giocatori")
+    parser.add_argument(
+        "--party-level", type=int, required=True, help="Livello del party"
+    )
+    parser.add_argument(
+        "--party-size", type=int, required=True, help="Numero di giocatori"
+    )
     parser.add_argument("--tone", type=str, default="cozy", help="Tono dell'avventura")
     parser.add_argument("--duration-hours", type=float, default=3, help="Durata in ore")
-    parser.add_argument("--output-dir", type=str, default="./output", help="Directory di output")
+    parser.add_argument(
+        "--output-dir", type=str, default="./output", help="Directory di output"
+    )
+    parser.add_argument(
+        "--input-dir",
+        type=str,
+        default=None,
+        help="Directory con lore e background dei personaggi",
+    )
     args = parser.parse_args()
 
     output_dir = args.output_dir
     os.makedirs(output_dir, exist_ok=True)
+    if args.input_dir:
+        run_import_pipeline(args.input_dir)
+
     params = AdventureGenerationParams(
         party_level=args.party_level,
         party_size=args.party_size,
         tone=args.tone,
-        duration_hours=args.duration_hours
+        duration_hours=args.duration_hours,
     )
-    json_path, md_path = generate_adv(output_dir, params)
+    json_path, md_path = generate_adv(output_dir, params, args.input_dir is not None)
 
     print(f"Avventura generata:\n- {json_path}\n- {md_path}")
 
 
-def generate_adv(output_dir:str, params: AdventureGenerationParams) -> tuple[str, str]:
+def generate_adv(
+    output_dir: str, params: AdventureGenerationParams, include_lore=False
+) -> tuple[str, str]:
     client = get_openai_client()
-    planner = create_planner_agent(client)
+    planner = create_planner_agent(client, include_lore)
     packet = planner(params)
 
     json_path = os.path.join(output_dir, "adventure_packet.json")
@@ -95,9 +120,9 @@ def generate_adv(output_dir:str, params: AdventureGenerationParams) -> tuple[str
         f.write(packet.model_dump_json(indent=2))
     with open(md_path, "w", encoding="utf-8") as f:
         f.write(format_adventure_markdown(packet))
+    # TODO : add pdf rendering https://github.com/naturalcrit/homebrewery/issues/809
     return json_path, md_path
 
 
 if __name__ == "__main__":
     main()
-
