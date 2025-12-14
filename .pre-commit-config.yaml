@@ -8,6 +8,6 @@ repos:
     hooks:
       - id: dump-uv-requirements
         name: Dump uv dependencies to requirements.txt
-        entry: uv pip freeze > requirements.txt
+        entry: "uv pip freeze > requirements.txt"
         language: system
         types: [python]
