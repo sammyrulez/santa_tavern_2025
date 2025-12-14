@@ -3,11 +3,10 @@
 from datapizza.agents import Agent
 from typing import List
 from santas_tavern.models import json_schema
-import  json
+import json
 
 
-
-def create_story_weaver_agent(client, sqad: List[Agent]):
+def create_story_weaver_agent(client, squad: List[Agent]):
     """
     Crea l'agente StoryWeaver per la generazione della storia.
     """
@@ -19,13 +18,19 @@ def create_story_weaver_agent(client, sqad: List[Agent]):
         "Ogni atto deve avere nome, descrizione e scene con descrizione e riferimenti agli incontri. "
         "Includi una lista di NPC rilevanti.",
         "Includi statistiche per i mostri da affrontare rilevanti.",
-        "Usa le seguenti risorse a tua disposizione per arricchire la storia: "+ ", ".join([helper.name for helper in sqad]) + ". Utilizza il più possibile i loro output per creare una storia ricca di dettagli",
-        "Restituisci l'avventura in formato JSON conforme al seguente schema: " + json.dumps(json_schema, indent=2) + " \n Rispetta scripolosamente la struttura e i valori delle enum indicate nello schema!"
+        "Usa le seguenti risorse a tua disposizione per arricchire la storia: "
+        + ", ".join([helper.name for helper in squad])
+        + ". Utilizza il più possibile i loro output per creare una storia ricca di dettagli",
+        "Restituisci l'avventura in formato JSON conforme al seguente schema: "
+        + json.dumps(json_schema, indent=2)
+        + " \n Rispetta scripolosamente la struttura e i valori delle enum indicate nello schema!",
     )
-    agent = Agent(name="StoryWeaver", client=client,
-    system_prompt="\n".join(system_prompt), )
+    agent = Agent(
+        name="StoryWeaver",
+        client=client,
+        system_prompt="\n".join(system_prompt),
+    )
 
-    for helper in sqad:
+    for helper in squad:
         agent.can_call(helper)
     return agent
-
