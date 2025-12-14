@@ -4,11 +4,4 @@ repos:
     hooks:
       - id: ruff
       - id: ruff-format
-  - repo: local
-    hooks:
-      - id: dump-uv-requirements
-        name: Dump uv dependencies to requirements.txt
-        entry: bash -lc
-        args: ["uv pip freeze > requirements.txt"]
-        language: system
-        pass_filenames: false
+
