@@ -13,6 +13,7 @@ def create_story_weaver_agent(client, squad: List[Agent]):
     system_prompt = (
         "Sei un Dungeon Master esperto di D&D 5e. "
         "Crea una avventura natalizia in 3 atti, con titolo, pitch, sinossi, atti e scene. "
+        "Crea una lista di 'adventure hooks' per coinvolgere i giocatori. Cita se puoi elementi del background dei personaggi. "
         "Gli Atti devono essere collegati a incontri D&D generati da altri agenti e devono essere esattamente tre ",
         "Il titolo dell'atto non deve contentere numeri. ",
         "Ogni atto deve avere nome, descrizione e scene con descrizione e riferimenti agli incontri. "

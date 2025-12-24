@@ -79,6 +79,7 @@ class AdventurePacket(BaseModel):
     title: str
     pitch: str
     synopsis: str
+    adventure_hooks: List[str]
     tone: str
     acts: List[Act]
     encounters: List[Encounter]

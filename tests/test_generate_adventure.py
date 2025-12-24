@@ -7,6 +7,8 @@ from santas_tavern.models import AdventureGenerationParams
 from judge import llm_as_a_judge
 from pathlib import Path
 
+from santas_tavern.rag import run_import_pipeline
+
 
 class AdventureTestCase(unittest.TestCase):
     def test_generate_adventure_direct(self):
@@ -18,8 +20,8 @@ class AdventureTestCase(unittest.TestCase):
             party_size=4,
             tone="cozy",
             duration_hours=3,
-            output_dir=str(output_dir),
         )
+        run_import_pipeline("./tests/test_lore_input")
         generate_adv(str(output_dir), params)
         output_path = Path(output_dir)
         files = list(output_path.iterdir())

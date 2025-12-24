@@ -68,7 +68,7 @@ def _get_item_details(
         )
 
 
-@tool
+@tool(name="monsters", description="Return monsters' details by challenge rating")
 def find_monsters_by_challenge_rating(
     min_cr: float = 0, max_cr: float = 30
 ) -> Dict[str, Any]:
