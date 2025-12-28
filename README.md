@@ -6,6 +6,8 @@ Agentic D&D one-shot generator for cozy Christmas sessions, built with [`datapiz
 
 ---
 
+![Agents and Tools Diagram](docs/agents_and_tools.png)
+
 ## 🎯 Project Overview
 
 **Santa's Tavern of Quests** is an AI-powered assistant for Dungeon Masters who want to run a **Christmas-themed Dungeons & Dragons one-shot** without spending hours in prep.
@@ -47,6 +49,9 @@ This project is designed as a submission for the **Datapizza Christmas AI Challe
 ---
 
 ## 🧩 Agent Architecture
+
+
+
 
 The system is built around several collaborating agents:
 
